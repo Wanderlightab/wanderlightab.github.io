@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlight Design AB</title>
+    <style>
+        /* 
+        ========================================
+        THEME COLORS
+        ========================================
+        Dark theme:
+        - Text: #d6d4cc
+        - Background: #24201a
+        
+        Light theme:
+        - Text: #24201a
+        - Background: #d6d4cc
+        */
+        
+        :root {
+            /* Default theme (light) */
+            --text-color: #24201a;
+            --bg-color: #d6d4cc;
+            --contact-bg: #ffffff;
+            --contact-text: #24201a;
+        }
+        
+        /* Dark theme class */
+        .dark-theme {
+            --text-color: #d6d4cc;
+            --bg-color: #24201a;
+            --contact-bg: #000000;
+            --contact-text: #d6d4cc;
+        }
+        
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Navigation styles */
+        .nav-container {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background-color: var(--bg-color);
+            padding: 15px 0;
+            z-index: 1000;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .nav-hidden {
+            transform: translateY(-100%);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+        }
+        
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Theme switch */
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--text-color);
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--bg-color);
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .theme-label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        /* Section styles */
+        section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Home section */
+        .home-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .home-content img {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        
+        .home-text {
+            flex: 1;
+        }
+        
+        /* About section */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        
+        .slide {
+            display: none;
+            width: 100%;
+            height: 400px;
+            background-position: center;
+            background-size: cover;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        /* Contact section - REDUCED HEIGHT */
+        #contact {
+            background-color: var(--contact-bg);
+            color: var(--contact-text);
+            position: relative;
+            min-height: 10vh; /* Reduced from 100vh to 50vh */
+            padding: 60px 20px; /* Reduced padding */
+        }
+        
+        .contact-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .contact-info h3 {
+            margin-bottom: 15px; /* Reduced margin */
+        }
+        
+        .contact-info p {
+            margin-bottom: 8px; /* Reduced margin */
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px; /* Reduced margin */
+        }
+        
+        .social-links a {
+            color: var(--contact-text);
+            font-size: 24px;
+            text-decoration: none;
+        }
+        
+        /* Footer that appears on scroll */
+        .footer-container {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--contact-bg);
+            color: var(--contact-text);
+            padding: 15px 0;
+            text-align: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .footer-hidden {
+            transform: translateY(100%);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .home-content {
+                flex-direction: column;
+            }
+            
+            .home-content img {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="nav-container">
+        <nav>
+            <div class="theme-container">
+                <span class="theme-label">Theme:</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <!-- Home Section -->
+    <section id="home">
+        <h1>Welcome to Our Website</h1>
+        <div class="home-content">
+            <img src="mainimage.png" alt="Main Image">
+            <div class="home-text">
+                <p>Wanderlight Design AB. grundades i den natursköna staden Mora i Sverige och växte fram ur en längtan att förena svensk hantverkstradition med kreativt historieberättande.</p>
+                <p>&nbsp</p>
+                <p>Målet är att vägleda varumärken mot att upptäcka sin identitet och sticka ut i en konkurrensutsatt global marknad, utan att förlora sin autenticitet.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about">
+        <h1>About Us</h1>
+        <p>Learn more about our company and what we do.</p>
+        <div class="slideshow-container">
+            <div class="slide active" style="background-image: url('image1.jpg')"></div>
+            <div class="slide" style="background-image: url('image2.jpg')"></div>
+            <div class="slide" style="background-image: url('image3.jpg')"></div>
+            <div class="slide" style="background-image: url('image4.jpg')"></div>
+        </div>
+        <p></p>
+        <p></p>
+    </section>
+    
+    <!-- Contact Section - REDUCED HEIGHT -->
+    <section id="contact">
+        <h1>Contact Us</h1>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Get in Touch</h3>
+                <p>Email: rebecka.wanderlight@gmail.com </p>
+                <p></p>
+                <p></p>
+            </div>
+            <div class="contact-info">
+                <h3>Follow Us</h3>
+                <p><a href="https://www.facebook.com/WanderlightBecky/" target="_blank">facebook.com/wanderlightbecky</a></p>
+                <p><a href="https://www.youtube.com/@WanderlightDesignAB" target="_blank">youtube.com/@WanderlightDesignAB</a></p>
+                <p></p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Fixed Footer -->
+    <div class="footer-container footer-hidden">
+        <p>© 2025 Wanderlight Design AB. All rights reserved.</p>
+    </div>
+    
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        
+        // Check if user has previously set a theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-theme');
+            themeToggle.checked = true;
+        }
+        
+        // Theme switch event listener
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Navigation and footer scroll behavior
+        const navContainer = document.querySelector('.nav-container');
+        const footerContainer = document.querySelector('.footer-container');
+        let lastScrollY = window.scrollY;
+        
+        // CONFIGURATION:
+        // Set these variables to true to enable the sliding behavior
+        // Set to false to disable (always show)
+        const enableNavHiding = true;
+        const enableFooterHiding = true;
+        
+        window.addEventListener('scroll', function() {
+            const currentScrollY = window.scrollY;
+            
+            // Navigation hiding/showing
+            if (enableNavHiding) {
+                if (currentScrollY > lastScrollY) {
+                    // Scrolling down - hide nav
+                    navContainer.classList.add('nav-hidden');
+                } else {
+                    // Scrolling up - show nav
+                    navContainer.classList.remove('nav-hidden');
+                }
+            }
+            
+            // Footer hiding/showing - MODIFIED: now shows when scrolling down
+            if (enableFooterHiding) {
+                if (currentScrollY > lastScrollY) {
+                    // Scrolling down - show footer
+                    footerContainer.classList.remove('footer-hidden');
+                } else {
+                    // Scrolling up - hide footer
+                    footerContainer.classList.add('footer-hidden');
+                }
+                
+                // Always show footer when at the very bottom of the page
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+                const scrollPosition = window.scrollY + windowHeight;
+                
+                if (scrollPosition > documentHeight - 50) {
+                    footerContainer.classList.remove('footer-hidden');
+                }
+            }
+            
+            lastScrollY = currentScrollY;
+        });
+        
+        // Image slideshow functionality
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        
+        function showSlide(n) {
+            // Hide all slides
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
+            }
+            
+            // Show current slide
+            slides[n].classList.add('active');
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+        
+        // Start slideshow
+        setInterval(nextSlide, 4000); // Change image every 4 seconds
+    </script>
+</body>
+</html>
